@@ -1,0 +1,30 @@
+# ── Hyprland core ──────────────────────────────
+hyprland
+xdg-desktop-portal-hyprland
+hyprlock
+hypridle
+hyprpolkitagent
+# ── Bar / launcher / notify / wallpaper ────────
+waybar
+wofi
+swaybg
+mako
+# ── Wayland utilities ──────────────────────────
+wl-clipboard
+cliphist
+grim
+slurp
+swappy
+brightnessctl
+playerctl
+wireplumber
+# ── Network & Bluetooth (easy toggles) ─────────
+network-manager-applet
+blueman
+pavucontrol
+# ── Toolkits / theming / fonts ─────────────────
+qt5-wayland
+qt6-wayland
+ttf-jetbrains-mono-nerd
+otf-font-awesome
+xdg-user-dirs

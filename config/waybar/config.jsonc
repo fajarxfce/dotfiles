@@ -1,0 +1,86 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 34,
+    "spacing": 6,
+    "margin-top": 6,
+    "margin-left": 10,
+    "margin-right": 10,
+
+    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    "modules-center": ["clock"],
+    "modules-right": ["tray", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+
+    "hyprland/workspaces": {
+        "on-click": "activate",
+        "format": "{icon}",
+        "format-icons": {
+            "default": "",
+            "active": ""
+        }
+    },
+
+    "hyprland/window": {
+        "max-length": 40,
+        "separate-outputs": true
+    },
+
+    "clock": {
+        "format": "{:%H:%M}",
+        "format-alt": "{:%a %d %b  %H:%M}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>"
+    },
+
+    "network": {
+        "format-wifi": "  {signalStrength}%",
+        "format-ethernet": "  ",
+        "format-linked": "  ",
+        "format-disconnected": "  ",
+        "tooltip-format-wifi": "{essid} · {signalStrength}%",
+        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format-disconnected": "Disconnected — right-click to toggle Wi-Fi",
+        "on-click": "nm-connection-editor",
+        "on-click-right": "~/.local/bin/toggle-wifi.sh"
+    },
+
+    "bluetooth": {
+        "format": "",
+        "format-off": "",
+        "format-disabled": "",
+        "format-connected": "  {num_connections}",
+        "tooltip-format": "{controller_alias}\n{status}\nright-click to toggle",
+        "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
+        "on-click": "blueman-manager",
+        "on-click-right": "~/.local/bin/toggle-bt.sh"
+    },
+
+    "pulseaudio": {
+        "format": "{icon}  {volume}%",
+        "format-muted": "  muted",
+        "format-icons": { "default": ["", "", ""] },
+        "on-click": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
+    },
+
+    "backlight": {
+        "format": "{icon}  {percent}%",
+        "format-icons": ["", "", ""],
+        "on-scroll-up": "brightnessctl set 5%+",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    "battery": {
+        "states": { "warning": 30, "critical": 15 },
+        "format": "{icon}  {capacity}%",
+        "format-charging": "  {capacity}%",
+        "format-plugged": "  {capacity}%",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip-format": "{timeTo} · {power}W"
+    },
+
+    "tray": {
+        "icon-size": 16,
+        "spacing": 8
+    }
+}
