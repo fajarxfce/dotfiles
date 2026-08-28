@@ -43,7 +43,15 @@ case "${1:-pick}" in
         note "Wallpaper dark & light: $(basename "$img")" ;;
 
     pick)
-        img=$(list_walls | sort -u | wofi --dmenu -i -p "Wallpaper ($cur)")
+        # fzf + a live image preview needs a terminal — relaunch in a floating
+        # kitty (kitty-wall) if we were started without one (e.g. from a keybind).
+        [ -t 0 ] || exec kitty --class kitty-wall -e "$0" pick
+        list=$(list_walls | sort -u)
+        [ -n "$list" ] || { note "Belum ada gambar. Taruh di ~/Pictures/Wallpapers"; sleep 2; exit 0; }
+        img=$(printf '%s\n' "$list" | fzf \
+            --prompt "Wallpaper ($cur) > " --info=inline --layout=reverse --height=100% \
+            --preview-window="right:62%" \
+            --preview 'kitten icat --clear --transfer-mode=memory --unicode-placeholder --stdin=no --scale-up --place=${FZF_PREVIEW_COLUMNS}x${FZF_PREVIEW_LINES}@0x0 {}')
         [ -n "$img" ] || exit 0
         set_wall "$cur" "$img"; reapply
         note "Tema $cur: $(basename "$img")" ;;
