@@ -25,67 +25,18 @@ cp -f "$CFG/wofi/styles/$new.css"   "$CFG/wofi/style.css"
 cp -f "$CFG/mako/configs/$new"      "$CFG/mako/config"
 echo "$new" > "$STATE"
 
-# kitty terminal colours (kitty.conf does `include current-theme.conf`).
-# Written inline so it works even though ~/.config/kitty isn't symlinked here.
-KT="$CFG/kitty/current-theme.conf"
-if [ -d "$CFG/kitty" ]; then
-    if [ "$new" = light ]; then
-        cat > "$KT" <<'EOF'
-# light theme (managed by theme.sh)
-background            #eff1f5
-foreground            #3a3f4b
-selection_background  #cfd6e6
-selection_foreground  #3a3f4b
-cursor                #4d74b8
-cursor_text_color     #eff1f5
-url_color             #4d74b8
-color0  #d7dae0
-color8  #9aa0aa
-color1  #d64760
-color9  #b83048
-color2  #4a8f3c
-color10 #3a7a2c
-color3  #b5891a
-color11 #96700e
-color4  #4d74b8
-color12 #3a5f9e
-color5  #8a5fc0
-color13 #7048a8
-color6  #2f9fb0
-color14 #1f8090
-color7  #4a4f5a
-color15 #3a3f4b
-EOF
-    else
-        cat > "$KT" <<'EOF'
-# dark theme (managed by theme.sh)
-background            #151720
-foreground            #d7dae0
-selection_background  #33415e
-selection_foreground  #d7dae0
-cursor                #8aa2c8
-cursor_text_color     #151720
-url_color             #8aa2c8
-color0  #1b1e2b
-color8  #3b4048
-color1  #f7768e
-color9  #ff8b98
-color2  #9ece6a
-color10 #b9f27c
-color3  #e0af68
-color11 #f0c987
-color4  #7aa2f7
-color12 #9bb8ff
-color5  #bb9af7
-color13 #d3b8ff
-color6  #7dcfff
-color14 #9be3ff
-color7  #a9b1d6
-color15 #d7dae0
-EOF
-    fi
-    # live-reload every running kitty (kitty reloads its config on SIGUSR1)
+# kitty terminal colours: kitty.conf does `include current-theme.conf`, which we
+# regenerate from the tracked color-<theme>.conf variant, then SIGUSR1 kitty
+# (it reloads its config on that signal) so the terminal flips live too.
+if [ -f "$CFG/kitty/color-$new.conf" ]; then
+    cp -f "$CFG/kitty/color-$new.conf" "$CFG/kitty/current-theme.conf"
     pkill -SIGUSR1 -x kitty 2>/dev/null || true
+fi
+
+# alacritty: overwrite the imported rice-colors.toml; live_config_reload picks
+# it up on its own (no signal needed).
+if [ -f "$CFG/alacritty/colors-$new.toml" ]; then
+    cp -f "$CFG/alacritty/colors-$new.toml" "$CFG/alacritty/rice-colors.toml"
 fi
 
 # wallpaper (always (re)set)

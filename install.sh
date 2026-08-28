@@ -83,6 +83,8 @@ if [ ! -f "$TH/hypr/.theme" ]; then
     cp -f "$TH/waybar/styles/dark.css" "$TH/waybar/style.css"
     cp -f "$TH/wofi/styles/dark.css"   "$TH/wofi/style.css"
     cp -f "$TH/mako/configs/dark"      "$TH/mako/config"
+    [ -f "$TH/kitty/color-dark.conf" ] && cp -f "$TH/kitty/color-dark.conf" "$TH/kitty/current-theme.conf"
+    [ -f "$TH/alacritty/colors-dark.toml" ] && cp -f "$TH/alacritty/colors-dark.toml" "$TH/alacritty/rice-colors.toml"
     echo dark > "$TH/hypr/.theme"
     c_ok "Tema awal: dark (ganti: ALT+Space atau klik-kanan jam)."
 else

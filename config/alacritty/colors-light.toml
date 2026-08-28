@@ -1,0 +1,28 @@
+# light theme (managed by theme.sh)
+[colors.primary]
+background = "#eff1f5"
+foreground = "#3a3f4b"
+
+[colors.cursor]
+cursor = "#4d74b8"
+text = "#eff1f5"
+
+[colors.normal]
+black   = "#d7dae0"
+red     = "#d64760"
+green   = "#4a8f3c"
+yellow  = "#b5891a"
+blue    = "#4d74b8"
+magenta = "#8a5fc0"
+cyan    = "#2f9fb0"
+white   = "#4a4f5a"
+
+[colors.bright]
+black   = "#9aa0aa"
+red     = "#b83048"
+green   = "#3a7a2c"
+yellow  = "#96700e"
+blue    = "#3a5f9e"
+magenta = "#7048a8"
+cyan    = "#1f8090"
+white   = "#3a3f4b"
