@@ -1,1 +1,2 @@
 bibata-cursor-theme-bin
+nwg-displays

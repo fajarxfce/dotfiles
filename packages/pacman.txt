@@ -18,6 +18,7 @@ swappy
 brightnessctl
 playerctl
 wireplumber
+wlr-randr
 # ── Search / system info / calendar ────────────
 fd
 fzf

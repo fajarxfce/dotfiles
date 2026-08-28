@@ -1,0 +1,8 @@
+# ── Workspace ↔ monitor bindings (optional) ───────────────────────────────
+# Pin workspaces to a specific monitor so they don't jump around when you plug
+# or unplug an external display. Machine-local (gitignored, seeded from this
+# .default by install.sh); nwg-displays can also write here.
+#
+# Example (workspaces 1–5 on the laptop, 6–10 on the external):
+#   workspace = 1, monitor:eDP-2, default:true
+#   workspace = 6, monitor:HDMI-A-1, default:true

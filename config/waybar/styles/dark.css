@@ -6,10 +6,10 @@
 }
 
 window#waybar {
-    background: rgba(21, 23, 32, 0.92);
+    background: #151720;
     color: #d7dae0;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+    border: none;
 }
 
 #workspaces { margin-left: 4px; }
@@ -19,7 +19,7 @@ window#waybar {
     padding: 0 6px;
     background: transparent;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
 }
 
 #workspaces button.active { color: #8aa2c8; }

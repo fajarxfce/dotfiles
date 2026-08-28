@@ -1,0 +1,13 @@
+# ── Monitor layout ────────────────────────────────────────────────────────
+# Auto-arrange every output at its native mode; an external monitor extends to
+# the right by default. This file is machine-local (gitignored, seeded from this
+# .default by install.sh) and is rewritten by the GUI (nwg-displays) or by hand.
+#
+# Manual examples:
+#   monitor = eDP-2,    1920x1080@144, 0x0,    1
+#   monitor = HDMI-A-1, preferred,     1920x0, 1              # extend right
+#   monitor = HDMI-A-1, preferred,     0x0,    1, transform,1 # portrait (90°)
+#   monitor = HDMI-A-1, preferred,     auto,   1, mirror, eDP-2
+#
+# Quick presets without editing this file: SUPER+O  (or monitor.sh …).
+monitor = , preferred, auto, 1

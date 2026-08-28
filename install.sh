@@ -75,6 +75,12 @@ for s in "$BIN_SRC"/*; do
     link "$s" "$HOME/.local/bin/$(basename "$s")"
 done
 
+# ── seed machine-local monitor layout (gitignored) ────────────────
+c_info "Seed layout monitor…"
+[ -f "$HOME/.config/hypr/monitors.conf" ]   || cp "$CONFIG_SRC/hypr/monitors.conf.default"   "$HOME/.config/hypr/monitors.conf"
+[ -f "$HOME/.config/hypr/workspaces.conf" ] || cp "$CONFIG_SRC/hypr/workspaces.conf.default" "$HOME/.config/hypr/workspaces.conf"
+c_ok "monitors.conf / workspaces.conf siap (atur: SUPER+O atau nwg-displays)."
+
 # ── seed default theme (dark) if none chosen yet ──────────────────
 c_info "Seed tema…"
 TH="$HOME/.config"
