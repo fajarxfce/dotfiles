@@ -18,6 +18,11 @@ swappy
 brightnessctl
 playerctl
 wireplumber
+# ── Search / system info / calendar ────────────
+fd
+fzf
+btop
+gsimplecal
 # ── Network & Bluetooth (easy toggles) ─────────
 network-manager-applet
 blueman

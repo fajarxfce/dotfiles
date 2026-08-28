@@ -12,9 +12,7 @@ window#waybar {
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-#workspaces {
-    margin-left: 4px;
-}
+#workspaces { margin-left: 4px; }
 
 #workspaces button {
     color: #7a828e;
@@ -24,26 +22,21 @@ window#waybar {
     border-radius: 8px;
 }
 
-#workspaces button.active {
-    color: #8aa2c8;
-}
+#workspaces button.active { color: #8aa2c8; }
 
 #workspaces button:hover {
     color: #d7dae0;
     background: rgba(255, 255, 255, 0.06);
 }
 
-#window {
-    color: #7a828e;
-    margin-left: 4px;
-}
+#window { color: #7a828e; margin-left: 4px; }
 
-#clock {
-    color: #d7dae0;
-    font-weight: 600;
-}
+#clock { color: #d7dae0; font-weight: 600; }
 
 #tray,
+#cpu,
+#memory,
+#disk,
 #pulseaudio,
 #backlight,
 #network,
@@ -53,22 +46,11 @@ window#waybar {
     color: #c5c8ce;
 }
 
-#battery.warning {
-    color: #e0af68;
-}
+#battery.warning  { color: #e0af68; }
+#battery.critical { color: #f7768e; }
+#pulseaudio.muted { color: #7a828e; }
 
-#battery.critical {
-    color: #f7768e;
-}
-
-#pulseaudio.muted {
-    color: #7a828e;
-}
-
-#tray menu {
-    background: #151720;
-    color: #d7dae0;
-}
+#tray menu { background: #151720; color: #d7dae0; }
 
 tooltip {
     background: #151720;
@@ -76,6 +58,4 @@ tooltip {
     border-radius: 8px;
 }
 
-tooltip label {
-    color: #d7dae0;
-}
+tooltip label { color: #d7dae0; }

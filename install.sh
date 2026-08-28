@@ -75,6 +75,20 @@ for s in "$BIN_SRC"/*; do
     link "$s" "$HOME/.local/bin/$(basename "$s")"
 done
 
+# ── seed default theme (dark) if none chosen yet ──────────────────
+c_info "Seed tema…"
+TH="$HOME/.config"
+if [ ! -f "$TH/hypr/.theme" ]; then
+    cp -f "$TH/hypr/themes/dark.conf"  "$TH/hypr/theme.conf"
+    cp -f "$TH/waybar/styles/dark.css" "$TH/waybar/style.css"
+    cp -f "$TH/wofi/styles/dark.css"   "$TH/wofi/style.css"
+    cp -f "$TH/mako/configs/dark"      "$TH/mako/config"
+    echo dark > "$TH/hypr/.theme"
+    c_ok "Tema awal: dark (ganti: ALT+Space atau klik-kanan jam)."
+else
+    c_ok "Tema tersimpan: $(cat "$TH/hypr/.theme")."
+fi
+
 # ── NVIDIA DRM modeset + early KMS ────────────────────────────────
 c_info "Konfigurasi NVIDIA modeset…"
 sudo install -Dm644 "$DOTFILES/system/modprobe.d/nvidia.conf" /etc/modprobe.d/nvidia.conf

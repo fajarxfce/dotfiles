@@ -24,20 +24,8 @@ window {
 #outer-box { margin: 0; }
 #scroll    { margin: 0; }
 
-#text {
-    color: #c5c8ce;
-    padding: 0 6px;
-}
+#text { color: #c5c8ce; padding: 0 6px; }
 
-#entry {
-    padding: 8px;
-    border-radius: 8px;
-}
-
-#entry:selected {
-    background-color: #2a3550;
-}
-
-#entry:selected #text {
-    color: #ffffff;
-}
+#entry { padding: 8px; border-radius: 8px; }
+#entry:selected { background-color: #2a3550; }
+#entry:selected #text { color: #ffffff; }
