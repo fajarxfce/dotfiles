@@ -13,4 +13,13 @@ elif [ -e "$intel" ]; then
     export AQ_DRM_DEVICES="$intel"
 fi
 
-exec Hyprland "$@"
+# start-hyprland is upstream's watchdog wrapper: it auto-restarts Hyprland on a
+# crash and is what Hyprland now expects (it prints "launched without
+# start-hyprland, highly advised against" when started directly). It uses execvp,
+# so the AQ_DRM_DEVICES we exported above is inherited by Hyprland. Args after --
+# are forwarded to Hyprland. Fall back to a direct launch if it isn't installed.
+if command -v start-hyprland >/dev/null 2>&1; then
+    exec start-hyprland -- "$@"
+else
+    exec Hyprland "$@"
+fi
