@@ -39,9 +39,15 @@ if [ -f "$CFG/alacritty/colors-$new.toml" ]; then
     cp -f "$CFG/alacritty/colors-$new.toml" "$CFG/alacritty/rice-colors.toml"
 fi
 
-# wallpaper (always (re)set)
+# wallpaper (always (re)set): a per-theme image if one was chosen via
+# wallpaper.sh, otherwise the solid theme colour.
 pkill -x swaybg 2>/dev/null
-swaybg -m fill -c "$BG" >/dev/null 2>&1 &
+WALL="$CFG/hypr/.wall-$new"
+if [ -s "$WALL" ] && [ -f "$(head -n1 "$WALL")" ]; then
+    swaybg -m fill -i "$(head -n1 "$WALL")" >/dev/null 2>&1 &
+else
+    swaybg -m fill -c "$BG" >/dev/null 2>&1 &
+fi
 
 # GTK apps
 if [ "$new" = light ]; then
