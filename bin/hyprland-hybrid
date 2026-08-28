@@ -1,0 +1,16 @@
+#!/bin/sh
+# Launch Hyprland with the Intel iGPU as the primary DRM device (NVIDIA for
+# on-demand offload via prime-run). Resolves the stable PCI by-path to the
+# current /dev/dri/cardN at launch — this dodges BOTH the unstable cardN
+# numbering AND the ':' inside by-path names, which aquamarine otherwise
+# mis-splits as the AQ_DRM_DEVICES separator (that caused the backend crash).
+intel=$(readlink -f /dev/dri/by-path/pci-0000:00:02.0-card 2>/dev/null)
+nvidia=$(readlink -f /dev/dri/by-path/pci-0000:01:00.0-card 2>/dev/null)
+
+if [ -e "$intel" ] && [ -e "$nvidia" ]; then
+    export AQ_DRM_DEVICES="$intel:$nvidia"
+elif [ -e "$intel" ]; then
+    export AQ_DRM_DEVICES="$intel"
+fi
+
+exec Hyprland "$@"

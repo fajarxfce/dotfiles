@@ -110,6 +110,17 @@ sudo systemctl enable ly@tty1.service 2>/dev/null || sudo systemctl enable ly.se
     c_warn "Display manager 'ly' belum ke-enable — cek 'systemctl enable ly@tty1'."
 c_ok "Services enabled."
 
+# ── ly session entry: Hyprland on Intel primary via the launcher ──
+c_info "Pasang session 'Hyprland (hybrid)' untuk ly…"
+sudo tee /usr/share/wayland-sessions/hyprland-hybrid.desktop >/dev/null <<EOF
+[Desktop Entry]
+Name=Hyprland (hybrid)
+Comment=Hyprland on the Intel iGPU, NVIDIA offload
+Exec=$HOME/.local/bin/hyprland-hybrid
+Type=Application
+EOF
+c_ok "Session 'Hyprland (hybrid)' terpasang (pilih ini di layar login ly)."
+
 # ── user session niceties ─────────────────────────────────────────
 command -v xdg-user-dirs-update >/dev/null && xdg-user-dirs-update || true
 
