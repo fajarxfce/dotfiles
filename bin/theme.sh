@@ -40,13 +40,14 @@ if [ -f "$CFG/alacritty/colors-$new.toml" ]; then
 fi
 
 # wallpaper (always (re)set): a per-theme image if one was chosen via
-# wallpaper.sh, otherwise the solid theme colour.
+# wallpaper.sh, otherwise the solid theme colour. swaybg is detached with
+# `setsid -f` so it survives the caller (e.g. the picker terminal closing).
 pkill -x swaybg 2>/dev/null
 WALL="$CFG/hypr/.wall-$new"
 if [ -s "$WALL" ] && [ -f "$(head -n1 "$WALL")" ]; then
-    swaybg -m fill -i "$(head -n1 "$WALL")" >/dev/null 2>&1 &
+    setsid -f swaybg -m fill -i "$(head -n1 "$WALL")" >/dev/null 2>&1
 else
-    swaybg -m fill -c "$BG" >/dev/null 2>&1 &
+    setsid -f swaybg -m fill -c "$BG" >/dev/null 2>&1
 fi
 
 # GTK apps
