@@ -36,6 +36,7 @@ window#waybar {
 
 #tray,
 #cpu,
+#temperature,
 #memory,
 #disk,
 #pulseaudio,
@@ -47,8 +48,9 @@ window#waybar {
     color: #c5c8ce;
 }
 
-#battery.warning  { color: #e0af68; }
-#battery.critical { color: #f7768e; }
+#battery.warning      { color: #e0af68; }
+#battery.critical     { color: #f7768e; }
+#temperature.critical { color: #f7768e; }
 #pulseaudio.muted { color: #7a828e; }
 
 #tray menu { background: #151720; color: #d7dae0; }

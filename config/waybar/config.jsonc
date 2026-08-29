@@ -6,7 +6,7 @@
 
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["tray", "cpu", "memory", "disk", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+    "modules-right": ["tray", "cpu", "temperature", "memory", "disk", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
 
     "hyprland/workspaces": {
         "on-click": "activate",
@@ -30,6 +30,19 @@
         "format": "CPU {usage}%",
         "interval": 2,
         "tooltip-format": "CPU load {load}",
+        "on-click": "kitty -e btop"
+    },
+
+    "temperature": {
+        // Absolute device path (stable across boots, unlike hwmonN numbering);
+        // temp1_input = coretemp "Package id 0" = the CPU package temperature.
+        "hwmon-path-abs": "/sys/devices/platform/coretemp.0/hwmon",
+        "input-filename": "temp1_input",
+        "format": "TEMP {temperatureC}°C",
+        "format-critical": "TEMP {temperatureC}°C",
+        "critical-threshold": 85,
+        "interval": 2,
+        "tooltip-format": "CPU package {temperatureC}°C",
         "on-click": "kitty -e btop"
     },
 
