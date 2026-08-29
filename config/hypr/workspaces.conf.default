@@ -1,8 +1,22 @@
-# ── Workspace ↔ monitor bindings (optional) ───────────────────────────────
-# Pin workspaces to a specific monitor so they don't jump around when you plug
-# or unplug an external display. Machine-local (gitignored, seeded from this
-# .default by install.sh); nwg-displays can also write here.
-#
-# Example (workspaces 1–5 on the laptop, 6–10 on the external):
-#   workspace = 1, monitor:eDP-2, default:true
-#   workspace = 6, monitor:HDMI-A-1, default:true
+# ── Workspace ↔ monitor bindings ──────────────────────────────────────────
+# Pins each workspace to a monitor so they don't jump around when the external
+# display is plugged/unplugged (extend mode). Machine-local: this .default is
+# seeded to ~/.config/hypr/workspaces.conf by install.sh (the live file is
+# gitignored); edit the live file for other hardware. Monitor names come from
+# `hyprctl monitors`. If a pinned monitor is absent, Hyprland falls the
+# workspace back onto an available one.
+#   internal (eDP-2)  : workspaces 1–5   → SUPER+1..5
+#   external (HDMI-A-1): workspaces 6–10  → SUPER+6..9,0
+# `default:true` = the workspace that opens first when that monitor connects.
+
+workspace = 1,  monitor:eDP-2, default:true
+workspace = 2,  monitor:eDP-2
+workspace = 3,  monitor:eDP-2
+workspace = 4,  monitor:eDP-2
+workspace = 5,  monitor:eDP-2
+
+workspace = 6,  monitor:HDMI-A-1, default:true
+workspace = 7,  monitor:HDMI-A-1
+workspace = 8,  monitor:HDMI-A-1
+workspace = 9,  monitor:HDMI-A-1
+workspace = 10, monitor:HDMI-A-1
