@@ -6,7 +6,7 @@
 
     "modules-left": ["hyprland/workspaces", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["tray", "cpu", "temperature", "memory", "disk", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+    "modules-right": ["tray", "cpu", "temperature", "memory", "disk", "pulseaudio", "backlight", "network#speed", "network", "bluetooth", "battery"],
 
     "hyprland/workspaces": {
         "on-click": "activate",
@@ -59,6 +59,14 @@
         "interval": 30,
         "tooltip-format": "Storage {used} / {total} ({percentage_used}% used)",
         "on-click": "thunar"
+    },
+
+    "network#speed": {
+        "interval": 2,
+        "format": "DL {bandwidthDownBytes}  UL {bandwidthUpBytes}",
+        "format-disconnected": "DL 0  UL 0",
+        "tooltip-format": "down {bandwidthDownBytes}/s\nup {bandwidthUpBytes}/s",
+        "on-click": "kitty -e btop"
     },
 
     "network": {

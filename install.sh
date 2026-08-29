@@ -139,6 +139,14 @@ if command -v gsettings >/dev/null; then
     gsettings set org.gnome.desktop.interface cursor-size  16                     2>/dev/null || true
 fi
 
+# ── default apps: Thunar as file manager, feh for images (keep GNOME apps out) ──
+if command -v xdg-mime >/dev/null; then
+    command -v thunar >/dev/null && xdg-mime default thunar.desktop inode/directory 2>/dev/null || true
+    command -v feh    >/dev/null && xdg-mime default feh.desktop \
+        image/png image/jpeg image/gif image/webp image/bmp 2>/dev/null || true
+    c_ok "Default apps: folder→Thunar, gambar→feh."
+fi
+
 # ~/.local/bin on PATH (zsh)
 if [ -f "$HOME/.zshrc" ] && ! grep -qs '.local/bin' "$HOME/.zshrc"; then
     printf '\nexport PATH="$HOME/.local/bin:$PATH"\n' >> "$HOME/.zshrc"

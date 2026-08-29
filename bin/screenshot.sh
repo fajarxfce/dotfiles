@@ -20,11 +20,10 @@ esac
 # 1) auto-copy the image to the clipboard (typed, so paste lands as an image)
 wl-copy --type image/png < "$file"
 
-# opens the screenshots folder with THIS file selected (nautilus), else the folder
+# open the screenshots folder in Thunar (sorted newest-first shows this shot on top;
+# Thunar has no CLI "select a file" like nautilus, and we deliberately avoid GNOME apps)
 open_folder() {
-    if command -v nautilus >/dev/null 2>&1; then
-        nautilus --select "$file" >/dev/null 2>&1 &
-    elif command -v thunar >/dev/null 2>&1; then
+    if command -v thunar >/dev/null 2>&1; then
         thunar "$dir" >/dev/null 2>&1 &
     else
         xdg-open "$dir" >/dev/null 2>&1 &

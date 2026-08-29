@@ -50,14 +50,35 @@ else
     setsid -f swaybg -m fill -c "$BG" >/dev/null 2>&1
 fi
 
-# GTK apps
-if [ "$new" = light ]; then
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-light' 2>/dev/null
-    gsettings set org.gnome.desktop.interface gtk-theme    'Adwaita'      2>/dev/null
-else
-    gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'  2>/dev/null
-    gsettings set org.gnome.desktop.interface gtk-theme    'Adwaita-dark' 2>/dev/null
-fi
+# GTK apps (Thunar etc.): Hyprland runs no XSettings daemon, so GTK3/4 apps read
+# ~/.config/gtk-{3,4}.0/settings.ini directly — gsettings alone never reaches them.
+# The old hard-coded gtk-theme-name=TokyoNight-zk rendered light, so Thunar was
+# stuck light. NOTE: GTK3 here ignores gtk-application-prefer-dark-theme from
+# settings.ini (tested), so we must name the dark VARIANT directly — Adwaita-dark
+# for dark, Adwaita for light. Existing icon/font/cursor keys are preserved.
+[ "$new" = light ] \
+    && { GDARK=0; SCHEME=prefer-light; GTKNAME=Adwaita;      } \
+    || { GDARK=1; SCHEME=prefer-dark;  GTKNAME=Adwaita-dark; }
+set_ini() {   # file key value  -> update key in place, or append under [Settings]
+    local f="$1" k="$2" v="$3"
+    mkdir -p "$(dirname "$f")"
+    [ -f "$f" ] || printf '[Settings]\n' > "$f"
+    grep -q "^\[Settings\]" "$f" || printf '[Settings]\n%s' "$(cat "$f")" > "$f"
+    if grep -q "^$k=" "$f"; then
+        sed -i "s|^$k=.*|$k=$v|" "$f"
+    else
+        sed -i "0,/^\[Settings\]/s//[Settings]\n$k=$v/" "$f"
+    fi
+}
+for gv in 3.0 4.0; do
+    f="$CFG/gtk-$gv/settings.ini"
+    set_ini "$f" gtk-theme-name "$GTKNAME"
+    set_ini "$f" gtk-application-prefer-dark-theme "$GDARK"
+done
+# also publish via gsettings for any app that does honour it (portals, GTK4)
+gsettings set org.gnome.desktop.interface color-scheme "$SCHEME" 2>/dev/null || true
+gsettings set org.gnome.desktop.interface gtk-theme \
+    "$([ "$new" = light ] && echo Adwaita || echo Adwaita-dark)" 2>/dev/null || true
 
 # live reload the rest only when switching interactively
 if [ "$live" = 1 ]; then
