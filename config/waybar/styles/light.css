@@ -22,7 +22,8 @@ window#waybar {
     border-radius: 0;
 }
 
-#workspaces button.active { color: #4d74b8; }
+#workspaces button:not(.empty):not(.active) { color: #c06a6a; }  /* has apps, not focused → dim red */
+#workspaces button.active { color: #d61f1f; font-weight: 700; }  /* focused → bright red */
 
 #workspaces button:hover {
     color: #3a3f4b;
