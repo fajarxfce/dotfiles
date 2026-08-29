@@ -32,6 +32,10 @@ pavucontrol
 qt5-wayland
 qt6-wayland
 gnome-themes-extra
+# Vulkan driver for the Intel iGPU. Without it the ONLY Vulkan device is the
+# NVIDIA dGPU, so GPU apps like Zed get pinned to the RTX 3060 (30 W idle, stalls
+# on refocus). With it we can force Zed onto the iGPU (see bin/zeditor).
+vulkan-intel
 ttf-jetbrains-mono-nerd
 otf-font-awesome
 xdg-user-dirs

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Launch Zed on the Intel iGPU instead of the NVIDIA dGPU.
+#
+# Why: Zed renders through Vulkan (its blade/GPUI backend). On this hybrid laptop
+# blade prefers the DISCRETE GPU, so Zed pins itself to the RTX 3060 — which then
+# sits at pstate P0 (~30 W) just to draw text, and stalls for a few seconds every
+# time Zed regains focus while the dGPU ramps back up from a low power state
+# (on X11/bspwm this showed up as the previous window's stale frame). Text editing
+# needs none of that. Exposing ONLY the Intel Vulkan ICD to this process forces
+# blade onto the iGPU: the stall is gone, ~30 W saved, and the dGPU is free to
+# runtime-suspend. prime-run and everything else are untouched — this is scoped to
+# Zed alone. Keep this in sync with the desktop override
+# (~/.local/share/applications/dev.zed.Zed.desktop), which sets the same vars.
+#
+# This wrapper covers terminal launches (~/.local/bin is ahead of /usr/bin on the
+# shell PATH); the desktop override covers GUI launches (the Hyprland/wofi session
+# PATH does NOT include ~/.local/bin).
+intel_icd=/usr/share/vulkan/icd.d/intel_icd.json
+if [ -e "$intel_icd" ]; then
+    export VK_DRIVER_FILES="$intel_icd"    # Vulkan loader >= 1.3.207
+    export VK_ICD_FILENAMES="$intel_icd"   # older loaders
+fi
+exec /usr/bin/zeditor "$@"

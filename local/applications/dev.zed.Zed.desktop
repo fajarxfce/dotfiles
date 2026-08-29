@@ -1,0 +1,21 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Zed
+GenericName=Text Editor
+Comment=A high-performance, multiplayer code editor.
+TryExec=zeditor
+StartupNotify=true
+# Run Zed on the Intel iGPU (see ~/dotfiles/bin/zeditor for the full rationale).
+# The GUI session PATH lacks ~/.local/bin, so we can't rely on the zeditor wrapper
+# here — instead set the Intel-only Vulkan ICD inline and call the system zeditor.
+Exec=env VK_DRIVER_FILES=/usr/share/vulkan/icd.d/intel_icd.json VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.json zeditor %U
+Icon=zed
+Categories=Utility;TextEditor;Development;IDE;
+Keywords=zed;
+MimeType=text/plain;application/x-zerosize;x-scheme-handler/zed;
+Actions=NewWorkspace;
+
+[Desktop Action NewWorkspace]
+Exec=env VK_DRIVER_FILES=/usr/share/vulkan/icd.d/intel_icd.json VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/intel_icd.json zeditor --new %U
+Name=Open a new workspace

@@ -75,6 +75,21 @@ for s in "$BIN_SRC"/*; do
     link "$s" "$HOME/.local/bin/$(basename "$s")"
 done
 
+# ── deploy user desktop overrides (Zed → Intel iGPU, etc.) ────────
+# These shadow the system .desktop files in /usr/share/applications so GUI
+# launches (wofi, keybinds) pick up our tweaks — the session PATH lacks
+# ~/.local/bin, so a wrapper on PATH alone can't cover GUI launches.
+if [ -d "$DOTFILES/local/applications" ]; then
+    c_info "Pasang desktop override ke ~/.local/share/applications…"
+    mkdir -p "$HOME/.local/share/applications"
+    for a in "$DOTFILES/local/applications/"*.desktop; do
+        [ -e "$a" ] && link "$a" "$HOME/.local/share/applications/$(basename "$a")"
+    done
+    command -v update-desktop-database >/dev/null && \
+        update-desktop-database "$HOME/.local/share/applications" 2>/dev/null || true
+    c_ok "Desktop override terpasang."
+fi
+
 # ── seed machine-local monitor layout (gitignored) ────────────────
 c_info "Seed layout monitor…"
 [ -f "$HOME/.config/hypr/monitors.conf" ]   || cp "$CONFIG_SRC/hypr/monitors.conf.default"   "$HOME/.config/hypr/monitors.conf"
