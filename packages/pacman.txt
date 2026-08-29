@@ -31,6 +31,7 @@ pavucontrol
 # ── Toolkits / theming / fonts ─────────────────
 qt5-wayland
 qt6-wayland
+gnome-themes-extra
 ttf-jetbrains-mono-nerd
 otf-font-awesome
 xdg-user-dirs

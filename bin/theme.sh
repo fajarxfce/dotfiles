@@ -55,7 +55,9 @@ fi
 # The old hard-coded gtk-theme-name=TokyoNight-zk rendered light, so Thunar was
 # stuck light. NOTE: GTK3 here ignores gtk-application-prefer-dark-theme from
 # settings.ini (tested), so we must name the dark VARIANT directly — Adwaita-dark
-# for dark, Adwaita for light. Existing icon/font/cursor keys are preserved.
+# for dark, Adwaita for light. Adwaita-dark is a real theme DIR from the
+# gnome-themes-extra package (in pacman.txt); without it the name silently falls
+# back to light. Existing icon/font/cursor keys are preserved.
 [ "$new" = light ] \
     && { GDARK=0; SCHEME=prefer-light; GTKNAME=Adwaita;      } \
     || { GDARK=1; SCHEME=prefer-dark;  GTKNAME=Adwaita-dark; }
