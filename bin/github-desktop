@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Launch GitHub Desktop (Electron) without hardware GPU acceleration.
+#
+# Why: on this hybrid laptop the Chromium GPU process runs Wayland-native and
+# tries the Intel iGPU via ANGLE-GL, which crashes at startup
+# ("intel: execbuf ioctl keeps returning ENOMEM" -> "GPU process exited
+# exit_code=134"). Chromium then relaunches the GPU process and falls back to
+# SwiftShader software rendering. That crash-then-retry dance is what makes
+# startup crawl (plus the noisy gbm_pixmap_wayland "Cannot create bo ... SCANOUT"
+# warnings). A git GUI needs zero GPU, so we skip hardware accel entirely: no
+# crash, no retry, fast start — and it stays Wayland-native (crisp, native
+# scaling). Keep in sync with the desktop override
+# (~/.local/share/applications/github-desktop.desktop), which passes the same flag.
+#
+# Wrapper covers terminal launches (~/.local/bin is ahead of /usr/bin on the shell
+# PATH); the desktop override covers GUI launches (session PATH lacks ~/.local/bin).
+exec /opt/github-desktop/github-desktop --disable-gpu "$@"

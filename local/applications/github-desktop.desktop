@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=GitHub Desktop
+Comment=Extend your GitHub workflow beyond your browser with GitHub Desktop
+Terminal=false
+Type=Application
+Icon=github-desktop
+Categories=Development;
+MimeType=x-scheme-handler/x-github-client;x-scheme-handler/x-github-desktop-auth;x-scheme-handler/x-github-desktop-dev-auth;
+# --disable-gpu: skip hardware GPU accel (see ~/dotfiles/bin/github-desktop for the
+# full rationale). The GUI session PATH lacks ~/.local/bin, so we can't rely on the
+# wrapper here — pass the flag inline and call the system binary directly.
+Exec=/usr/bin/github-desktop --disable-gpu %U
