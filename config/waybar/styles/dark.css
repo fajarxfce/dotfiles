@@ -32,6 +32,16 @@ window#waybar {
 
 #window { color: #7a828e; margin-left: 4px; }
 
+/* Hairline fences around the system-stats group on the left.
+   The label itself is a single blank space; the visible line is this
+   border, so it spans the full bar height instead of the glyph's. */
+#custom-sep,
+#custom-sep2 {
+    padding: 0;
+    margin: 0 8px;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
 #clock { color: #d7dae0; font-weight: 600; }
 
 #tray,

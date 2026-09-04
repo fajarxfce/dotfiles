@@ -4,9 +4,19 @@
     "height": 34,
     "spacing": 4,
 
-    "modules-left": ["hyprland/workspaces", "hyprland/window"],
+    // System stats sit on the LEFT, right after the workspaces, fenced off by
+    // hairline separators (see #custom-sep in the stylesheet).
+    "modules-left": ["hyprland/workspaces", "custom/sep", "disk", "cpu", "temperature", "memory", "custom/sep2", "hyprland/window"],
     "modules-center": ["clock"],
-    "modules-right": ["tray", "cpu", "temperature", "memory", "disk", "pulseaudio", "backlight", "network#speed", "network", "bluetooth", "battery"],
+    // Right side is deliberately sparse: nm-applet and blueman-applet already
+    // live in the tray, so the old network#speed module is gone (its numbers
+    // moved into the network tooltip) and bluetooth only appears once a device
+    // is actually connected.
+    "modules-right": ["tray", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+
+    // A blank label; the visible hairline is the CSS border-left.
+    "custom/sep":  { "format": " ", "tooltip": false },
+    "custom/sep2": { "format": " ", "tooltip": false },
 
     "hyprland/workspaces": {
         "on-click": "activate",
@@ -26,11 +36,19 @@
         "on-click-right": "~/.local/bin/theme.sh toggle"
     },
 
+    "disk": {
+        "format": "DISK {percentage_used}%",
+        "path": "/",
+        "interval": 30,
+        "tooltip-format": "Storage {used} / {total} ({percentage_used}% used)",
+        "on-click": "thunar"
+    },
+
     "cpu": {
         "format": "CPU {usage}%",
         "interval": 2,
         "tooltip-format": "CPU load {load}",
-        "on-click": "kitty -e btop"
+        "on-click": "alacritty -e btop"
     },
 
     "temperature": {
@@ -43,50 +61,38 @@
         "critical-threshold": 85,
         "interval": 2,
         "tooltip-format": "CPU package {temperatureC}°C",
-        "on-click": "kitty -e btop"
+        "on-click": "alacritty -e btop"
     },
 
     "memory": {
         "format": "RAM {percentage}%",
         "interval": 3,
         "tooltip-format": "RAM {used:0.1f}G / {total:0.1f}G   ·   Swap {swapUsed:0.1f}G",
-        "on-click": "kitty -e btop"
-    },
-
-    "disk": {
-        "format": "DISK {percentage_used}%",
-        "path": "/",
-        "interval": 30,
-        "tooltip-format": "Storage {used} / {total} ({percentage_used}% used)",
-        "on-click": "thunar"
-    },
-
-    "network#speed": {
-        "interval": 2,
-        "format": "DL {bandwidthDownBytes}  UL {bandwidthUpBytes}",
-        "format-disconnected": "DL 0  UL 0",
-        "tooltip-format": "down {bandwidthDownBytes}/s\nup {bandwidthUpBytes}/s",
-        "on-click": "kitty -e btop"
+        "on-click": "alacritty -e btop"
     },
 
     "network": {
+        // One module for wifi/lan/offline. Throughput lives in the tooltip now
+        // rather than eating bar width as a second module.
+        "interval": 2,
         "format-wifi": "WIFI {signalStrength}%",
         "format-ethernet": "LAN",
         "format-linked": "LAN",
         "format-disconnected": "NET off",
-        "tooltip-format-wifi": "{essid} · {signalStrength}%",
-        "tooltip-format-ethernet": "{ifname}",
+        "tooltip-format-wifi": "{essid} · {signalStrength}%\n↓ {bandwidthDownBytes}/s   ↑ {bandwidthUpBytes}/s",
+        "tooltip-format-ethernet": "{ifname}\n↓ {bandwidthDownBytes}/s   ↑ {bandwidthUpBytes}/s",
         "tooltip-format-disconnected": "Disconnected — right-click to toggle Wi-Fi",
         "on-click": "nm-connection-editor",
         "on-click-right": "~/.local/bin/toggle-wifi.sh"
     },
 
     "bluetooth": {
-        "format": "BT",
-        "format-off": "BT off",
-        "format-disabled": "BT off",
+        // Empty format = waybar hides the module. Off/on-but-idle is already
+        // visible via the blueman tray icon, so only show a connected count.
+        "format": "",
+        "format-off": "",
+        "format-disabled": "",
         "format-connected": "BT {num_connections}",
-        "tooltip-format": "{controller_alias}\n{status}\nright-click to toggle",
         "tooltip-format-connected": "{controller_alias}\n{device_enumerate}",
         "on-click": "blueman-manager",
         "on-click-right": "~/.local/bin/toggle-bt.sh"

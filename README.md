@@ -28,6 +28,7 @@ config/waybar/        # bar: config.jsonc + styles/{dark,light}.css
 config/wofi/          # launcher: config + styles/{dark,light}.css
 config/mako/          # notifikasi: configs/{dark,light}
 bin/                  # theme, filesearch, prime-run, powermenu, screenshot, toggle-*
+                      # idle.sh (sleep/idle), thunar-actions.sh (Open Terminal Here)
 system/modprobe.d/    # nvidia_drm modeset=1
 ```
 
@@ -40,7 +41,7 @@ yang di-track cuma varian `dark`/`light`.
 **Aplikasi**
 | Key | Aksi | Key | Aksi |
 |---|---|---|---|
-| `SUPER + Return` | Terminal (kitty) | `SUPER + b` | Firefox |
+| `SUPER + Return` | Terminal (alacritty) | `SUPER + b` | Firefox |
 | `SUPER + Alt + Return` | Terminal floating | `SUPER + e` | Geany |
 | `SUPER + f` | Thunar | `SUPER + y` | Yazi |
 | `SUPER + v` | Neovim | `SUPER + m` | ncmpcpp |
@@ -59,6 +60,7 @@ yang di-track cuma varian `dark`/`light`.
 | `+ n` | Network | `+ b` | Bluetooth |
 | `+ c` | Clipboard | `+ s` | Screenshot |
 | `+ p` | Power menu | `+ o` | Scratchpad |
+| `+ i` | **Sleep & idle** (timer lock/layar/suspend) | | |
 | `Alt + Space` | **Toggle tema dark/light** | | |
 
 **Window & sistem**
@@ -84,15 +86,19 @@ Palet ada di `config/hypr/themes/`, `config/waybar/styles/`, `config/wofi/styles
 - **App**: launcher wofi (`Ctrl+Alt+s`).
 - **File**: `SUPER+Shift+f` → fzf streaming (instan walau ratusan ribu file, ala
   GNOME search light), buka pakai app default.
-- **System info** di waybar:  CPU ·  RAM ·  Storage ·  Battery.
-  Klik CPU/RAM buka **btop**; klik Storage buka Thunar.
+- **System info** di waybar, dikelompokkan di **kiri** setelah workspace dan
+  dipagari garis hairline:  Storage ·  CPU ·  suhu ·  RAM.
+  Klik CPU/RAM/suhu buka **btop**; klik Storage buka Thunar.
 - **Kalender**: hover jam (tooltip) atau klik jam → gsimplecal (enteng).
 - **Clipboard**: `SUPER+Alt+c` (riwayat via cliphist).
 
 ## Network & Bluetooth (paling gampang)
 
 - Tray applet: `nm-applet` (network) & `blueman-applet` (bluetooth) → klik langsung.
-- Modul waybar: klik-kiri buka manager, klik-kanan toggle on/off.
+- Modul waybar: satu modul network saja (wifi/LAN/off) — throughput pindah ke
+  tooltip-nya. Bluetooth hanya muncul kalau ada device tersambung, karena
+  status on/off sudah kelihatan di tray. Klik-kiri buka manager, klik-kanan
+  toggle on/off.
 - CLI: `toggle-wifi.sh`, `toggle-bt.sh`.
 
 ## Hybrid GPU

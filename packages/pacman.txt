@@ -24,6 +24,13 @@ fd
 fzf
 btop
 gsimplecal
+# ── File manager + terminal ────────────────────
+# Needed by bin/thunar-actions.sh ("Open Terminal Here" → alacritty)
+thunar
+thunar-volman
+gvfs
+alacritty
+kitty          # sekunder: theme.sh masih menjaga warnanya
 # ── Network & Bluetooth (easy toggles) ─────────
 network-manager-applet
 blueman

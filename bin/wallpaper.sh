@@ -44,8 +44,8 @@ case "${1:-pick}" in
 
     pick)
         # fzf + a live image preview needs a terminal — relaunch in a floating
-        # kitty (kitty-wall) if we were started without one (e.g. from a keybind).
-        [ -t 0 ] || exec kitty --class kitty-wall -e "$0" pick
+        # alacritty (alacritty-wall) if we were started without one (e.g. from a keybind).
+        [ -t 0 ] || exec alacritty --class alacritty-wall -e "$0" pick
         list=$(list_walls | sort -u)
         [ -n "$list" ] || { note "Belum ada gambar. Taruh di ~/Pictures/Wallpapers"; sleep 2; exit 0; }
         img=$(printf '%s\n' "$list" | fzf \

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Floating keybind cheatsheet. Bound to ALT+F1, shown in a floating kitty
-# (class kitty-cheatsheet). Closes on ESC or q.
+# Floating keybind cheatsheet. Bound to ALT+F1, shown in a floating alacritty
+# (class alacritty-cheatsheet). Closes on ESC or q.
 set -u
 
 ESC=$'\e'
@@ -13,7 +13,7 @@ LW=46             # left column visible width
 # Rows: "§Title" = header · "" = blank · "keys|desc" = entry
 left=(
   "§ APPLICATIONS  (SUPER +)"
-  "Return|Terminal (kitty)"
+  "Return|Terminal (alacritty)"
   "ALT Return|Floating terminal"
   "b|Firefox"
   "e|Editor (geany)"
@@ -70,6 +70,7 @@ right=(
   "SUPER SHIFT Esc|System monitor (btop)"
   "Print|Screenshot area"
   "CSA l|Lock screen"
+  "SUPER ALT i|Sleep & idle settings"
   "CSA p/r/q|Off / reboot / exit"
   "CSA k|Kill (click window)"
   "ALT F1|This cheatsheet"
