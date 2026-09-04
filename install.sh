@@ -96,6 +96,14 @@ c_info "Seed layout monitor…"
 [ -f "$HOME/.config/hypr/workspaces.conf" ] || cp "$CONFIG_SRC/hypr/workspaces.conf.default" "$HOME/.config/hypr/workspaces.conf"
 c_ok "monitors.conf / workspaces.conf siap (atur: SUPER+O atau nwg-displays)."
 
+# ── seed sleep/idle settings + generate hypridle.conf ─────────────
+# idle.conf is machine-local (gitignored); hypridle.conf is GENERATED from it
+# by idle.sh, so it must never be edited by hand.
+c_info "Seed pengaturan sleep/idle…"
+[ -f "$HOME/.config/hypr/idle.conf" ] || cp "$CONFIG_SRC/hypr/idle.conf.default" "$HOME/.config/hypr/idle.conf"
+"$BIN_SRC/idle.sh" apply >/dev/null 2>&1 || true
+c_ok "Sleep/idle siap: $("$BIN_SRC/idle.sh" status 2>/dev/null) (atur: SUPER+ALT+I)."
+
 # ── seed default theme (dark) if none chosen yet ──────────────────
 c_info "Seed tema…"
 TH="$HOME/.config"
@@ -160,6 +168,14 @@ if command -v xdg-mime >/dev/null; then
     command -v feh    >/dev/null && xdg-mime default feh.desktop \
         image/png image/jpeg image/gif image/webp image/bmp 2>/dev/null || true
     c_ok "Default apps: folder→Thunar, gambar→feh."
+fi
+
+# ── Thunar: working "Open Terminal Here" + exo terminal helper ────
+# Thunar's stock action calls `exo-open --launch TerminalEmulator`, which is a
+# no-op without xfce4-terminal. Repoint it at alacritty and register an exo helper.
+if command -v thunar >/dev/null; then
+    c_info "Pasang custom action Thunar…"
+    "$BIN_SRC/thunar-actions.sh" || c_warn "Thunar custom action gagal dipasang."
 fi
 
 # ~/.local/bin on PATH (zsh)

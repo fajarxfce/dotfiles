@@ -1,0 +1,9 @@
+# ── Sleep & idle settings ───────────────────────────────────────────────
+# Values are MINUTES. 0 = disabled.
+# Edit with:  SUPER+ALT+I  (GUI)   ·   idle.sh tui   ·   idle.sh set KEY VAL
+# hypridle.conf is generated from this file — don't edit it directly.
+
+LOCK=30                  # lock the screen after N minutes idle
+SCREEN_OFF=32            # turn the display off after N minutes idle
+SUSPEND=50               # suspend (sleep) after N minutes idle
+SUSPEND_ON_AC=0          # 1 = suspend even when plugged in, 0 = stay awake on AC
