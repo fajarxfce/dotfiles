@@ -108,3 +108,21 @@ Kompositor render di Intel (`AQ_DRM_DEVICES`). Aplikasi berat ke NVIDIA:
 ```sh
 prime-run <app>        # cek: prime-run glxinfo | grep "OpenGL renderer"
 ```
+
+## Codex lewat SSH + GNU Screen
+
+GNU Screen 5.0.2 bisa merusak karakter Unicode pada spinner judul Codex menjadi
+kode kontrol. Gejalanya: bunyi bell berulang, teks judul menimpa input seperti
+huruf ghost, dan kursor terlihat bergeser walaupun posisi edit tetap benar.
+
+Di mesin tempat Codex berjalan, tambahkan pengaturan ini ke bagian `[tui]` dalam
+`~/.codex/config.toml` (gabungkan jika bagian tersebut sudah ada):
+
+```toml
+[tui]
+terminal_title = ["project"]
+```
+
+Untuk sesi yang sedang terbuka, jalankan `/title`, hilangkan centang `activity`
+(spinner) dengan Space, lalu Enter untuk menyimpan. Judul tetap menampilkan nama
+proyek. Pengaturan ini sudah diuji dengan Codex 0.156.1 dan GNU Screen 5.0.2.
