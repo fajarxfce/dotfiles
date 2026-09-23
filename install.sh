@@ -177,7 +177,7 @@ fi
 
 # ── Thunar: working "Open Terminal Here" + exo terminal helper ────
 # Thunar's stock action calls `exo-open --launch TerminalEmulator`, which is a
-# no-op without xfce4-terminal. Repoint it at alacritty and register an exo helper.
+# no-op without xfce4-terminal. Repoint it at kitty and register an exo helper.
 if command -v thunar >/dev/null; then
     c_info "Pasang custom action Thunar…"
     "$BIN_SRC/thunar-actions.sh" || c_warn "Thunar custom action gagal dipasang."

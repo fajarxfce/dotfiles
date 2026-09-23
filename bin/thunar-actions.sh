@@ -7,17 +7,18 @@
 #  which is a no-op here: exo has no TerminalEmulator helper configured and
 #  xfce4-terminal isn't installed. So we do two things:
 #
-#    1. point the uca.xml action straight at our terminal (alacritty)
+#    1. point the uca.xml action straight at our terminal (kitty)
 #    2. register a proper exo helper, so Thunar's *built-in* "Open Terminal"
 #       entry and any other exo-based app work too
 #
 #  Idempotent: re-running only updates our own action, other custom actions
 #  in uca.xml are left untouched.
+#  Pass --no-reload to update the actions without closing open Thunar windows.
 # ════════════════════════════════════════════════════════════════════════════
 set -u
 
 TERM_BIN=""
-for t in alacritty kitty foot; do command -v "$t" >/dev/null 2>&1 && { TERM_BIN="$t"; break; }; done
+for t in kitty alacritty foot; do command -v "$t" >/dev/null 2>&1 && { TERM_BIN="$t"; break; }; done
 [ -n "$TERM_BIN" ] || { echo "Tidak ada terminal (kitty/alacritty/foot) — lewati." >&2; exit 0; }
 
 case "$TERM_BIN" in
@@ -108,7 +109,7 @@ fi
 echo "  exo helper → $TERM_BIN"
 
 # ── 3. reload Thunar so the menu picks it up ────────────────────────────────
-if pgrep -x thunar >/dev/null 2>&1; then
+if [ "${1:-}" != --no-reload ] && pgrep -x thunar >/dev/null 2>&1; then
     thunar -q >/dev/null 2>&1 || true
     echo "  thunar daemon direstart"
 fi

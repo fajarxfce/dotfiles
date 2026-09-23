@@ -26,12 +26,12 @@ chafa          # fallback preview wallpaper.sh kalau kitty gak ada (alacritty ga
 btop
 gsimplecal
 # ── File manager + terminal ────────────────────
-# Needed by bin/thunar-actions.sh ("Open Terminal Here" → alacritty)
+# Needed by bin/thunar-actions.sh ("Open Terminal Here" → kitty)
 thunar
 thunar-volman
 gvfs
 alacritty
-kitty          # picker wallpaper: cuma kitty yg bisa preview gambar asli (+ theme.sh jaga warnanya)
+kitty          # terminal utama: drop file di Wayland + preview gambar wallpaper
 # ── Network & Bluetooth (easy toggles) ─────────
 network-manager-applet
 blueman

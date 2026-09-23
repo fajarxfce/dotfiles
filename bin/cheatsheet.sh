@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Floating keybind cheatsheet. Bound to ALT+F1, shown in a floating alacritty
+# Floating keybind cheatsheet. Bound to ALT+F1, shown in a floating terminal
 # (class alacritty-cheatsheet). Closes on ESC or q.
 set -u
 
@@ -13,7 +13,7 @@ LW=46             # left column visible width
 # Rows: "§Title" = header · "" = blank · "keys|desc" = entry
 left=(
   "§ APPLICATIONS  (SUPER +)"
-  "Return|Terminal (alacritty)"
+  "Return|Terminal (kitty)"
   "ALT Return|Floating terminal"
   "b|Firefox"
   "e|Editor (geany)"

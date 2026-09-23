@@ -41,7 +41,7 @@ yang di-track cuma varian `dark`/`light`.
 **Aplikasi**
 | Key | Aksi | Key | Aksi |
 |---|---|---|---|
-| `SUPER + Return` | Terminal (alacritty) | `SUPER + b` | Firefox |
+| `SUPER + Return` | Terminal (kitty) | `SUPER + b` | Firefox |
 | `SUPER + Alt + Return` | Terminal floating | `SUPER + e` | Geany |
 | `SUPER + f` | Thunar | `SUPER + y` | Yazi |
 | `SUPER + v` | Neovim | `SUPER + m` | ncmpcpp |
@@ -108,6 +108,20 @@ Kompositor render di Intel (`AQ_DRM_DEVICES`). Aplikasi berat ke NVIDIA:
 ```sh
 prime-run <app>        # cek: prime-run glxinfo | grep "OpenGL renderer"
 ```
+
+## Drag file ke terminal / agent TUI
+
+`SUPER + Return` membuka Kitty. Drag file dari Thunar ke area input terminal
+untuk memasukkan path-nya, termasuk nama file yang mengandung spasi. Di input
+agent TUI, path masuk sebagai teks; tekan Enter sendiri setelah pesan siap.
+Menu Thunar **Open Terminal Here** juga memakai Kitty.
+
+Alacritty tetap terpasang sebagai alternatif. Versi 0.17.0 dengan backend Wayland
+belum menerima drop file. Untuk memakai fitur ini, buka terminal Kitty baru;
+jendela Alacritty yang sudah terbuka tetap berjalan.
+
+Jika agent berjalan di VPS lewat SSH, path file laptop tidak otomatis tersedia
+di VPS. Upload filenya terlebih dahulu dan gunakan path di VPS.
 
 ## Codex lewat SSH + GNU Screen
 
