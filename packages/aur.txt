@@ -1,2 +1,3 @@
 bibata-cursor-theme-bin
 nwg-displays
+gh0stzk-gtk-themes     # tema GTK3 Rose Pine Dawn/Moon yg dipakai theme.sh

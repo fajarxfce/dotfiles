@@ -50,17 +50,25 @@ else
     setsid -f swaybg -m fill -c "$BG" >/dev/null 2>&1
 fi
 
-# GTK apps (Thunar etc.): Hyprland runs no XSettings daemon, so GTK3/4 apps read
-# ~/.config/gtk-{3,4}.0/settings.ini directly — gsettings alone never reaches them.
-# The old hard-coded gtk-theme-name=TokyoNight-zk rendered light, so Thunar was
-# stuck light. NOTE: GTK3 here ignores gtk-application-prefer-dark-theme from
-# settings.ini (tested), so we must name the dark VARIANT directly — Adwaita-dark
-# for dark, Adwaita for light. Adwaita-dark is a real theme DIR from the
-# gnome-themes-extra package (in pacman.txt); without it the name silently falls
-# back to light. Existing icon/font/cursor keys are preserved.
+# GTK apps (Thunar, the file picker): Hyprland runs no XSettings daemon, so GTK
+# apps read ~/.config/gtk-{3,4}.0/settings.ini directly — gsettings alone never
+# reaches them. NOTE: GTK3 here ignores gtk-application-prefer-dark-theme from
+# settings.ini (tested), so the dark VARIANT has to be named directly.
+#
+# GTK3 gets Rose Pine (AUR: gh0stzk-gtk-themes). Adwaita was why every dialog
+# looked like GNOME — this pair is muted and low-contrast-on-purpose, and Dawn
+# vs Moon reads as light vs dark at a glance. The themes ship gtk-3.20/ only,
+# which is correct: GTK3 prefers gtk-3.20/ over gtk-3.0/.
+#
+# GTK4 keeps its built-in Adwaita: there is no Rose Pine gtk-4.0/ dir, and a
+# theme name GTK4 can't find is silently dropped. GTK4 *does* honour
+# prefer-dark-theme, so GDARK below is what actually darkens it — no need to
+# name an -dark variant (and so no need for gnome-themes-extra here).
+# Existing icon/font/cursor keys are preserved.
+GTK4NAME=Adwaita
 [ "$new" = light ] \
-    && { GDARK=0; SCHEME=prefer-light; GTKNAME=Adwaita;      } \
-    || { GDARK=1; SCHEME=prefer-dark;  GTKNAME=Adwaita-dark; }
+    && { GDARK=0; SCHEME=prefer-light; GTK3NAME=RosePineDawn-zk; } \
+    || { GDARK=1; SCHEME=prefer-dark;  GTK3NAME=RosePineMoon-zk; }
 set_ini() {   # file key value  -> update key in place, or append under [Settings]
     local f="$1" k="$2" v="$3"
     mkdir -p "$(dirname "$f")"
@@ -72,15 +80,14 @@ set_ini() {   # file key value  -> update key in place, or append under [Setting
         sed -i "0,/^\[Settings\]/s//[Settings]\n$k=$v/" "$f"
     fi
 }
+set_ini "$CFG/gtk-3.0/settings.ini" gtk-theme-name "$GTK3NAME"
+set_ini "$CFG/gtk-4.0/settings.ini" gtk-theme-name "$GTK4NAME"
 for gv in 3.0 4.0; do
-    f="$CFG/gtk-$gv/settings.ini"
-    set_ini "$f" gtk-theme-name "$GTKNAME"
-    set_ini "$f" gtk-application-prefer-dark-theme "$GDARK"
+    set_ini "$CFG/gtk-$gv/settings.ini" gtk-application-prefer-dark-theme "$GDARK"
 done
 # also publish via gsettings for any app that does honour it (portals, GTK4)
 gsettings set org.gnome.desktop.interface color-scheme "$SCHEME" 2>/dev/null || true
-gsettings set org.gnome.desktop.interface gtk-theme \
-    "$([ "$new" = light ] && echo Adwaita || echo Adwaita-dark)" 2>/dev/null || true
+gsettings set org.gnome.desktop.interface gtk-theme "$GTK3NAME" 2>/dev/null || true
 
 # live reload the rest only when switching interactively
 if [ "$live" = 1 ]; then
