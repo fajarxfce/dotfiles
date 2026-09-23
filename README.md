@@ -140,3 +140,15 @@ terminal_title = ["project"]
 Untuk sesi yang sedang terbuka, jalankan `/title`, hilangkan centang `activity`
 (spinner) dengan Space, lalu Enter untuk menyimpan. Judul tetap menampilkan nama
 proyek. Pengaturan ini sudah diuji dengan Codex 0.156.1 dan GNU Screen 5.0.2.
+
+Kalau scroll mouse malah menggerakkan input, pasang [`.screenrc`](.screenrc)
+sebagai `~/.screenrc` di mesin yang menjalankan Screen (VPS untuk sesi SSH).
+Konfigurasi ini mempertahankan buffer terminal biasa agar scroll tidak diubah
+menjadi tombol panah, serta menyimpan hingga 10.000 baris riwayat di Screen.
+Installer memasangnya untuk mesin lokal; di VPS cukup salin file tersebut.
+
+Untuk Screen yang sudah berjalan, detach dengan **Ctrl+A, lalu D** dan attach
+lagi agar pengaturan terminal dibaca ulang. Codex tetap berjalan selama detach.
+Riwayat di buffer Screen juga bisa dibuka dengan **Ctrl+A, lalu Esc**; tekan Esc
+lagi untuk kembali mengetik. Batas baru tidak mengembalikan baris yang sudah
+dibuang oleh buffer sebelumnya.

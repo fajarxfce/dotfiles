@@ -1,0 +1,6 @@
+# Keep Alacritty/Kitty scrollback available while Screen is attached.
+# In the alternate buffer, a mouse wheel can become Up/Down keys in the TUI.
+termcapinfo alacritty|xterm* ti@:te@
+
+# Keep more conversation history in Screen's own copy/scrollback mode too.
+defscrollback 10000

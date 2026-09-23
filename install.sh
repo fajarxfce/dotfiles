@@ -71,6 +71,7 @@ c_info "Pasang config ke ~/.config…"
 for d in "$CONFIG_SRC"/*; do
     link "$d" "$HOME/.config/$(basename "$d")"
 done
+link "$DOTFILES/.screenrc" "$HOME/.screenrc"
 
 # ── deploy scripts ────────────────────────────────────────────────
 c_info "Pasang script ke ~/.local/bin…"
