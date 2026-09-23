@@ -15,6 +15,11 @@ c_info() { printf '\033[1;34m::\033[0m %s\n' "$*"; }
 c_ok()   { printf '\033[1;32m ✓\033[0m %s\n' "$*"; }
 c_warn() { printf '\033[1;33m !\033[0m %s\n' "$*"; }
 
+# Read a package list: drop blank lines, whole-line comments AND trailing
+# "pkg   # kenapa" comments — without this pacman gets the entire line as one
+# bogus target name and the whole install aborts.
+pkglist() { sed -e 's/[[:space:]]*#.*$//' -e 's/[[:space:]]*$//' "$1" | grep -vE '^$'; }
+
 [ "$(id -u)" -ne 0 ] || { echo "Jangan jalankan sebagai root — pakai user biasa."; exit 1; }
 command -v pacman >/dev/null || { echo "Ini bukan Arch Linux."; exit 1; }
 
@@ -31,7 +36,7 @@ for h in yay paru; do command -v "$h" >/dev/null && { AUR="$h"; break; }; done
 
 # ── official-repo packages ────────────────────────────────────────
 c_info "Install paket dari repo resmi…"
-mapfile -t PAC < <(grep -vE '^\s*#|^\s*$' "$DOTFILES/packages/pacman.txt")
+mapfile -t PAC < <(pkglist "$DOTFILES/packages/pacman.txt")
 sudo pacman -S --needed --noconfirm "${PAC[@]}"
 c_ok "Paket repo resmi terpasang."
 
@@ -39,11 +44,11 @@ c_ok "Paket repo resmi terpasang."
 if [ -f "$DOTFILES/packages/aur.txt" ]; then
     if [ -n "$AUR" ]; then
         c_info "Install paket AUR via $AUR…"
-        mapfile -t AURP < <(grep -vE '^\s*#|^\s*$' "$DOTFILES/packages/aur.txt")
+        mapfile -t AURP < <(pkglist "$DOTFILES/packages/aur.txt")
         [ "${#AURP[@]}" -gt 0 ] && "$AUR" -S --needed --noconfirm "${AURP[@]}"
         c_ok "Paket AUR terpasang."
     else
-        c_warn "AUR helper (yay/paru) tidak ada — lewati: $(tr '\n' ' ' < "$DOTFILES/packages/aur.txt")"
+        c_warn "AUR helper (yay/paru) tidak ada — lewati: $(pkglist "$DOTFILES/packages/aur.txt" | tr '\n' ' ')"
     fi
 fi
 

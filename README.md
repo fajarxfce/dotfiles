@@ -95,10 +95,10 @@ Palet ada di `config/hypr/themes/`, `config/waybar/styles/`, `config/wofi/styles
 ## Network & Bluetooth (paling gampang)
 
 - Tray applet: `nm-applet` (network) & `blueman-applet` (bluetooth) → klik langsung.
-- Modul waybar: satu modul network saja (wifi/LAN/off) — throughput pindah ke
-  tooltip-nya. Bluetooth hanya muncul kalau ada device tersambung, karena
-  status on/off sudah kelihatan di tray. Klik-kiri buka manager, klik-kanan
-  toggle on/off.
+- Modul waybar: satu modul network (wifi/LAN/off) dengan kecepatan download `↓`
+  dan upload `↑` langsung di bar. Bluetooth hanya muncul kalau ada device
+  tersambung, karena status on/off sudah kelihatan di tray. Klik-kiri buka
+  manager, klik-kanan toggle on/off.
 - CLI: `toggle-wifi.sh`, `toggle-bt.sh`.
 
 ## Hybrid GPU

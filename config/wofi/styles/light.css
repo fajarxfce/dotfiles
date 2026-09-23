@@ -27,5 +27,6 @@ window {
 #text { color: #4a4f5a; padding: 0 6px; }
 
 #entry { padding: 8px; border-radius: 8px; }
+#entry * { background: transparent; } /* GTK must not paint a second selection behind the icon/text. */
 #entry:selected { background-color: #d3dcf0; }
 #entry:selected #text { color: #1c2433; }

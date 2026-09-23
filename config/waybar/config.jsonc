@@ -8,10 +8,8 @@
     // hairline separators (see #custom-sep in the stylesheet).
     "modules-left": ["hyprland/workspaces", "custom/sep", "disk", "cpu", "temperature", "memory", "custom/sep2", "hyprland/window"],
     "modules-center": ["clock"],
-    // Right side is deliberately sparse: nm-applet and blueman-applet already
-    // live in the tray, so the old network#speed module is gone (its numbers
-    // moved into the network tooltip) and bluetooth only appears once a device
-    // is actually connected.
+    // Network status and live download/upload share one module. Bluetooth only
+    // appears once a device is connected; the managers also live in the tray.
     "modules-right": ["tray", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
 
     // A blank label; the visible hairline is the CSS border-left.
@@ -72,15 +70,14 @@
     },
 
     "network": {
-        // One module for wifi/lan/offline. Throughput lives in the tooltip now
-        // rather than eating bar width as a second module.
+        // Keep download/upload visible; bandwidth*Bytes already includes /s.
         "interval": 2,
-        "format-wifi": "WIFI {signalStrength}%",
-        "format-ethernet": "LAN",
-        "format-linked": "LAN",
+        "format-wifi": "WIFI {signalStrength}%  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+        "format-ethernet": "LAN  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
+        "format-linked": "LAN  ↓ {bandwidthDownBytes}  ↑ {bandwidthUpBytes}",
         "format-disconnected": "NET off",
-        "tooltip-format-wifi": "{essid} · {signalStrength}%\n↓ {bandwidthDownBytes}/s   ↑ {bandwidthUpBytes}/s",
-        "tooltip-format-ethernet": "{ifname}\n↓ {bandwidthDownBytes}/s   ↑ {bandwidthUpBytes}/s",
+        "tooltip-format-wifi": "{essid} · {signalStrength}%\n↓ {bandwidthDownBytes}   ↑ {bandwidthUpBytes}",
+        "tooltip-format-ethernet": "{ifname}\n↓ {bandwidthDownBytes}   ↑ {bandwidthUpBytes}",
         "tooltip-format-disconnected": "Disconnected — right-click to toggle Wi-Fi",
         "on-click": "nm-connection-editor",
         "on-click-right": "~/.local/bin/toggle-wifi.sh"

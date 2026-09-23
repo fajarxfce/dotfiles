@@ -22,6 +22,7 @@ wlr-randr
 # ── Search / system info / calendar ────────────
 fd
 fzf
+chafa          # fallback preview wallpaper.sh kalau kitty gak ada (alacritty gak punya protokol gambar)
 btop
 gsimplecal
 # ── File manager + terminal ────────────────────
@@ -30,7 +31,7 @@ thunar
 thunar-volman
 gvfs
 alacritty
-kitty          # sekunder: theme.sh masih menjaga warnanya
+kitty          # picker wallpaper: cuma kitty yg bisa preview gambar asli (+ theme.sh jaga warnanya)
 # ── Network & Bluetooth (easy toggles) ─────────
 network-manager-applet
 blueman
