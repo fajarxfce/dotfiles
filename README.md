@@ -116,6 +116,9 @@ untuk memasukkan path-nya, termasuk nama file yang mengandung spasi. Di input
 agent TUI, path masuk sebagai teks; tekan Enter sendiri setelah pesan siap.
 Menu Thunar **Open Terminal Here** juga memakai Kitty.
 
+Di input Codex, **Shift+Enter** membuat baris baru, termasuk lewat SSH + GNU
+Screen. Kitty mengirim encoding Alt+Enter yang bisa diteruskan oleh Screen.
+
 Alacritty tetap terpasang sebagai alternatif. Versi 0.17.0 dengan backend Wayland
 belum menerima drop file. Untuk memakai fitur ini, buka terminal Kitty baru;
 jendela Alacritty yang sudah terbuka tetap berjalan.
