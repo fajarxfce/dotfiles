@@ -59,6 +59,7 @@ yang di-track cuma varian `dark`/`light`.
 |---|---|---|---|
 | `+ n` | Network | `+ b` | Bluetooth |
 | `+ c` | Clipboard | `+ s` | Screenshot |
+| `+ v` | Rekam layar / stop | | |
 | `+ p` | Power menu | `+ o` | Scratchpad |
 | `+ i` | **Sleep & idle** (timer lock/layar/suspend) | | |
 | `Alt + Space` | **Toggle tema dark/light** | | |
@@ -73,6 +74,31 @@ yang di-track cuma varian `dark`/`light`.
 | `SUPER + Ctrl + 1..0` | Kirim window ke ws | `Alt + Tab` | Window switcher |
 | `SUPER + Shift + Esc` | System monitor (btop) | `SUPER + Esc` | Reload config |
 | `Ctrl+SUPER+Alt + p/r/l` | Poweroff/Reboot/Lock | `Print` | Screenshot area |
+
+**SUPER+A** memaksimalkan window sambil menjaga window floating di workspace
+yang sama tetap terlihat dan bisa diklik di atasnya. Fokus keyboard tetap di
+window yang dimaksimalkan. Tekan lagi untuk kembali ke ukuran/layout semula.
+
+## Rekam layar
+
+**SUPER+Alt+V** membuka menu untuk merekam **area pilihan**, **window aktif**,
+atau **monitor penuh**. Fokuskan window/monitor yang diinginkan sebelum membuka
+menu. Tekan shortcut yang sama lagi atau klik indikator merah **REC** di Waybar
+untuk stop dan menyimpan video. Esc membatalkan pemilihan area/menu.
+
+Video tersimpan sebagai **MP4 (H.264), 30 fps, tanpa audio** di
+`~/Videos/Recordings` (mengikuti folder Videos dari XDG jika diubah).
+Klik kanan indikator REC atau pilih **Buka folder rekaman** untuk membuka hasilnya.
+Screenshot tetap lewat **SUPER+Alt+S** atau **Print**.
+
+Mode window merekam area layar pada posisi window saat mulai: window perlu
+tetap di tempat dan terlihat; window lain yang menutupinya ikut terekam.
+Area/window harus berada di satu monitor.
+
+CLI: `screenrecord.sh area`, `screenrecord.sh window`, `screenrecord.sh screen`,
+dan `screenrecord.sh stop`. Installer memasang `wf-recorder` dan `jq` dari daftar
+paket. Recorder dijalankan sebagai user service `hypr-screenrecord.service`;
+log error tersedia lewat `journalctl --user -u hypr-screenrecord.service`.
 
 ## Tema dark ⇄ light
 

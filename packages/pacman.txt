@@ -14,6 +14,8 @@ wl-clipboard
 cliphist
 grim
 slurp
+wf-recorder    # rekam area/window/monitor ke MP4 (screenrecord.sh)
+jq             # geometry Hyprland dan status recording untuk waybar
 swappy
 brightnessctl
 playerctl

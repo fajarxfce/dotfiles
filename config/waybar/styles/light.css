@@ -44,6 +44,12 @@ window#waybar {
 
 #clock { color: #3a3f4b; font-weight: 600; }
 
+#custom-recording {
+    padding: 0 8px;
+    color: #d61f1f;
+    font-weight: 700;
+}
+
 #tray,
 #cpu,
 #temperature,

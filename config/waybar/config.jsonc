@@ -10,7 +10,16 @@
     "modules-center": ["clock"],
     // Network status and live download/upload share one module. Bluetooth only
     // appears once a device is connected; the managers also live in the tray.
-    "modules-right": ["tray", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+    "modules-right": ["custom/recording", "tray", "pulseaudio", "backlight", "network", "bluetooth", "battery"],
+
+    "custom/recording": {
+        "exec": "~/.local/bin/screenrecord.sh status",
+        "return-type": "json",
+        "hide-empty-text": true,
+        "interval": 1,
+        "on-click": "~/.local/bin/screenrecord.sh stop",
+        "on-click-right": "~/.local/bin/screenrecord.sh folder"
+    },
 
     // A blank label; the visible hairline is the CSS border-left.
     "custom/sep":  { "format": " ", "tooltip": false },
