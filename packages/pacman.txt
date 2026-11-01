@@ -6,6 +6,12 @@ hypridle
 hyprpolkitagent
 # ── Bar / launcher / notify / wallpaper ────────
 waybar
+# Build the small Hyprland Lua compatibility patch (bin/build-waybar.sh).
+meson
+ninja
+gcc
+pkgconf
+patch
 wofi
 swaybg
 mako
@@ -15,8 +21,15 @@ cliphist
 grim
 slurp
 wf-recorder    # rekam area/window/monitor ke MP4 (screenrecord.sh)
+ffmpeg         # thumbnail, preview, dan ekspor trim/crop rekaman
+mpv            # putar hasil rekaman dari notifikasi
 jq             # geometry Hyprland dan status recording untuk waybar
 swappy
+satty          # crop, coret, panah, teks, blur, save/copy dari notifikasi screenshot
+python
+python-gobject # editor video GTK: trim dan crop
+python-cairo
+gtk3
 brightnessctl
 playerctl
 wireplumber
@@ -49,3 +62,4 @@ vulkan-intel
 ttf-jetbrains-mono-nerd
 otf-font-awesome
 xdg-user-dirs
+xdg-utils      # buka video/folder hasil capture di aplikasi default

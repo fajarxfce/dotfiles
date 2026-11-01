@@ -73,7 +73,7 @@ gen() {
         echo "general {"
         echo "    lock_cmd = pidof hyprlock || hyprlock       # never stack lockers"
         echo "    before_sleep_cmd = loginctl lock-session    # lock before suspend"
-        echo "    after_sleep_cmd = hyprctl dispatch dpms on  # screen back on"
+        echo "    after_sleep_cmd = hyprctl dispatch 'hl.dsp.dpms({action=\"on\"})'"
         echo "    ignore_dbus_inhibit = false                 # respect video players etc."
         echo "    ignore_systemd_inhibit = false"
         echo "}"
@@ -92,8 +92,8 @@ gen() {
             echo "# display off after ${SCREEN_OFF}m"
             echo "listener {"
             echo "    timeout = $((SCREEN_OFF * 60))"
-            echo "    on-timeout = hyprctl dispatch dpms off"
-            echo "    on-resume  = hyprctl dispatch dpms on"
+            echo "    on-timeout = hyprctl dispatch 'hl.dsp.dpms({action=\"off\"})'"
+            echo "    on-resume  = hyprctl dispatch 'hl.dsp.dpms({action=\"on\"})'"
             echo "}"
         fi
 
@@ -111,13 +111,12 @@ gen() {
 restart_hypridle() {
     if command -v hyprctl >/dev/null 2>&1 && hyprctl monitors >/dev/null 2>&1; then
         pkill -x hypridle 2>/dev/null || true
-        hyprctl dispatch exec hypridle >/dev/null 2>&1 || true
+        setsid -f hypridle >/dev/null 2>&1 || true
     elif pgrep -x hypridle >/dev/null 2>&1; then
         pkill -x hypridle 2>/dev/null || true
         setsid -f hypridle >/dev/null 2>&1 || true
     fi
-    # Outside a Hyprland session and not running: leave it — hyprland.conf's
-    # `exec-once = hypridle` starts it at login with the freshly written config.
+    # Outside the session, desktop-start.sh starts it at the next login.
 }
 
 fmt() { [ "$1" -eq 0 ] && printf 'off' || printf '%sm' "$1"; }
@@ -242,6 +241,7 @@ case "${1:-menu}" in
     menu)          menu ;;
     tui)           tui ;;
     apply)         load; apply ;;
+    _generate)     load; gen ;;
     status)        load; printf '%s\n' "$(summary)" ;;
     maybe-suspend) maybe_suspend ;;
     set)

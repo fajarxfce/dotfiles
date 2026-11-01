@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# The Lua-compatible build retains native occupied/empty workspace reporting.
+set -euo pipefail
+target="$HOME/.local/opt/waybar-lua/bin/waybar"
+if [[ ! -x "$target" ]]; then
+    printf 'Waybar Lua build is missing. Run: %s/build-waybar.sh\n' \
+        "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" >&2
+    exit 1
+fi
+exec "$target" "$@"

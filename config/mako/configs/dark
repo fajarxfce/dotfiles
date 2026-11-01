@@ -16,3 +16,15 @@ icons=1
 [urgency=critical]
 border-color=#f7768e
 default-timeout=0
+
+[app-name=Screenshot actionable]
+default-timeout=15000
+on-button-left=invoke-default-action
+on-button-middle=invoke-action copy
+on-button-right=exec makoctl menu -n "$id" -- wofi --dmenu --prompt 'Screenshot'
+
+[app-name=Screenrecord actionable]
+default-timeout=15000
+on-button-left=invoke-default-action
+on-button-middle=invoke-action copy
+on-button-right=exec makoctl menu -n "$id" -- wofi --dmenu --prompt 'Rekaman'

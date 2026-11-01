@@ -19,7 +19,7 @@ esac
 [ "$new" = light ] && BG=eff1f5 || BG=151720
 
 # regenerate the active files from the tracked variants
-cp -f "$CFG/hypr/themes/$new.conf"  "$CFG/hypr/theme.conf"
+# Lua reads .theme directly for compositor border colors.
 cp -f "$CFG/waybar/styles/$new.css" "$CFG/waybar/style.css"
 cp -f "$CFG/wofi/styles/$new.css"   "$CFG/wofi/style.css"
 cp -f "$CFG/mako/configs/$new"      "$CFG/mako/config"

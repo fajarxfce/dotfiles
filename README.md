@@ -4,6 +4,7 @@ Setup Hyprland minimalis untuk laptop hybrid graphics (Intel iGPU + NVIDIA dGPU)
 Kompositor jalan di **Intel iGPU** biar mulus & hemat baterai; NVIDIA on-demand
 via `prime-run`. Keybind di-samain dengan **sxhkd gh0stzk** biar gak perlu adaptasi.
 Tema **dark + light** bisa di-toggle. Blur/shadow dimatiin → ringan.
+Konfigurasi ini memakai **Hyprland 0.57+ dengan Lua**.
 
 ## Pasang (fresh Arch install)
 
@@ -23,7 +24,7 @@ di layar login (ly) → masuk.** (Reboot dulu biar NVIDIA early-KMS full apply.)
 ```
 install.sh            # installer idempotent (paket + symlink + nvidia + seed tema)
 packages/             # daftar paket repo (pacman.txt) & AUR (aur.txt)
-config/hypr/          # hyprland.conf, hyprlock, hypridle, themes/{dark,light}.conf
+config/hypr/          # hyprland.lua + modules/, hyprlock, hypridle
 config/waybar/        # bar: config.jsonc + styles/{dark,light}.css
 config/wofi/          # launcher: config + styles/{dark,light}.css
 config/mako/          # notifikasi: configs/{dark,light}
@@ -33,15 +34,46 @@ system/modprobe.d/    # nvidia_drm modeset=1
 ```
 
 Config di-**symlink** ke `~/.config`, script ke `~/.local/bin`. File tema aktif
-(`theme.conf`, `style.css`, `mako/config`) di-generate `theme.sh` dan di-`.gitignore`;
+(`style.css`, `mako/config`, warna terminal) di-generate `theme.sh` dan di-`.gitignore`;
 yang di-track cuma varian `dark`/`light`.
+
+`hyprland.lua` memuat modul `desktop`, `displays`, `bindings`, dan `rules`.
+Layout lokal `monitors.conf` / `workspaces.conf` tetap bisa dikelola
+`nwg-displays`; modul Lua membacanya sebagai data. **SUPER+Esc** menerapkan
+perubahan. Autostart ada di `desktop-start.sh` dan tidak menggandakan proses
+saat dijalankan ulang.
+
+Nomor workspace di Waybar bisa diklik; scroll di atas nomornya pindah ke
+workspace sebelumnya/berikutnya pada monitor itu. Merah terang berarti aktif,
+merah muda berarti ada app di workspace lain, dan abu-abu berarti kosong.
+Workspace bernomor di `workspaces.conf` dibuat persistent saat monitornya
+terhubung agar tombol workspace kosong tetap ada.
+
+Modul `hyprland/workspaces` memakai build Waybar 0.15 dengan patch dispatcher
+Lua untuk Hyprland 0.57. Installer membangunnya ke `~/.local/opt/waybar-lua/`;
+launcher `~/.local/bin/waybar` memakai build tersebut. Paket Waybar sistem
+tetap terpasang. Source dipatok dengan SHA-256 dan patch ada di `patches/`.
+Jalankan `build-waybar.sh` untuk membangun ulang setelah pembaruan library.
+
+## Monitor: mirror dan extend
+
+**SUPER+O → Mirror** menampilkan layar laptop di monitor eksternal dengan
+orientasi landscape. Rotasi portrait lama direset. Resolusi disamakan bila
+didukung kedua layar; refresh rate dipilih dari mode yang didukung masing-masing.
+**Extend** atau **Laptop/Eksternal saja** melepaskan hubungan mirror.
+
+Preset langsung diterapkan dan disimpan ke `~/.config/hypr/monitors.conf`,
+sehingga bertahan setelah reload/login. Layout sebelumnya dicadangkan ke
+`~/.cache/dotfiles/backups/monitors-*.conf`. Jika monitor eksternal tidak
+terhubung, memilih Mirror tidak mengubah layout tersimpan. Pengaturan drag,
+rotasi, dan skala manual tetap tersedia lewat pilihan GUI.
 
 ## Keybinding (mirror sxhkd gh0stzk · SUPER = Win)
 
 **Aplikasi**
 | Key | Aksi | Key | Aksi |
 |---|---|---|---|
-| `SUPER + Return` | Terminal (kitty) | `SUPER + b` | Firefox |
+| `SUPER + Return` | Terminal (Alacritty) | `SUPER + b` | Firefox |
 | `SUPER + Alt + Return` | Terminal floating | `SUPER + e` | Geany |
 | `SUPER + f` | Thunar | `SUPER + y` | Yazi |
 | `SUPER + v` | Neovim | `SUPER + m` | ncmpcpp |
@@ -79,6 +111,21 @@ yang di-track cuma varian `dark`/`light`.
 yang sama tetap terlihat dan bisa diklik di atasnya. Fokus keyboard tetap di
 window yang dimaksimalkan. Tekan lagi untuk kembali ke ukuran/layout semula.
 
+## Screenshot: edit, crop, dan copy
+
+**SUPER+Alt+S** atau **Print** memilih area; **SUPER+Print** menangkap layar penuh.
+Gambar disimpan ke `~/Pictures/Screenshots` (mengikuti folder Pictures dari XDG)
+dan langsung tersalin ke clipboard.
+
+- **Klik kiri preview notifikasi** membuka editor Satty dalam window floating.
+- **Klik kanan notifikasi** membuka menu **Edit / Crop / Coret**, **Copy**, dan
+  **Buka folder**. Klik tengah langsung copy ulang.
+- Di editor, gunakan toolbar untuk crop, coretan, panah, teks, highlight, dan
+  blur. **Ctrl+C** menyalin hasil edit sekaligus menyimpannya ke file screenshot;
+  **Ctrl+S** menyimpan tanpa copy. **Esc** menutup editor.
+
+Notifikasi tersedia selama 15 detik. Installer memasang Satty dari paket repo.
+
 ## Rekam layar
 
 **SUPER+Alt+V** membuka menu untuk merekam **area pilihan**, **window aktif**,
@@ -91,20 +138,41 @@ Video tersimpan sebagai **MP4 (H.264), 30 fps, tanpa audio** di
 Klik kanan indikator REC atau pilih **Buka folder rekaman** untuk membuka hasilnya.
 Screenshot tetap lewat **SUPER+Alt+S** atau **Print**.
 
+Setelah stop, preview notifikasi tersedia selama 15 detik:
+
+- **Klik kiri** membuka **Edit Rekaman**, editor GTK dalam window floating.
+- **Klik kanan** membuka menu **Edit / Trim / Crop**, **Putar video**,
+  **Copy file**, dan **Buka folder**. Klik tengah langsung copy file.
+- **Trim:** geser slider waktu lalu klik **Awal di sini** / **Akhir di sini**,
+  atau isi waktu awal dan akhir dalam detik.
+- **Crop:** seret persegi pada gambar preview. **Reset crop** mengembalikan area
+  penuh. Ukuran hasil terlihat dalam piksel; batas mengikuti kelipatan dua
+  untuk format H.264.
+- **Simpan video…** mengekspor MP4 (H.264) dengan ukuran hasil crop dan durasi
+  yang dipilih. Pilih nama baru; editor menolak menimpa video asli. Audio yang
+  ada ikut disimpan. **Batalkan ekspor** membuang hasil sementara.
+- Setelah selesai, **Copy hasil** menyalin file video yang sudah diedit.
+  Copy memakai URI file untuk aplikasi yang mendukung paste file.
+
+Menunggu notifikasi atau mengedit video tidak menghalangi rekaman berikutnya.
+Editor memakai GTK melalui Wayland. Slider menampilkan frame preview; preview
+dan ekspor dikerjakan FFmpeg lewat CPU. **Putar video** membuka mpv.
+
 Mode window merekam area layar pada posisi window saat mulai: window perlu
 tetap di tempat dan terlihat; window lain yang menutupinya ikut terekam.
 Area/window harus berada di satu monitor.
 
 CLI: `screenrecord.sh area`, `screenrecord.sh window`, `screenrecord.sh screen`,
-dan `screenrecord.sh stop`. Installer memasang `wf-recorder` dan `jq` dari daftar
-paket. Recorder dijalankan sebagai user service `hypr-screenrecord.service`;
+dan `screenrecord.sh stop`. Installer memasang `wf-recorder`, `jq`, `ffmpeg`,
+`mpv`, GTK3, dan binding Python GTK/Cairo. Recorder memakai user service `hypr-screenrecord.service`;
 log error tersedia lewat `journalctl --user -u hypr-screenrecord.service`.
 
 ## Tema dark ⇄ light
 
 `ALT + Space` (atau **klik-kanan jam** di waybar) untuk switch. Yang ikut berubah:
 border Hyprland, waybar, wofi, mako, tema GTK (Adwaita), dan wallpaper solid.
-Palet ada di `config/hypr/themes/`, `config/waybar/styles/`, `config/wofi/styles/`,
+Warna border ada di `config/hypr/modules/desktop.lua`; palet aplikasi ada di
+`config/waybar/styles/`, `config/wofi/styles/`,
 `config/mako/configs/`. Pilihan terakhir disimpan & auto-apply saat login.
 
 ## Search & system info

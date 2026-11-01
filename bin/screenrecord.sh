@@ -2,6 +2,7 @@
 # Usage: screenrecord.sh [toggle|area|window|screen|stop|status|folder]
 # SUPER+ALT+V opens the recording menu, or stops the current recording.
 # A dedicated user service owns the recorder and finalizes MP4 files with SIGINT.
+# Click the result notification to trim/crop; right-click for other actions.
 set -euo pipefail
 umask 077
 export PATH="$HOME/.local/bin:$PATH"
@@ -42,6 +43,57 @@ show_status() {
     fi
 }
 
+show_result() {
+    local file="$1" dir thumbnail='' cleanup_command icon=video-x-generic reply notification_id action
+    [[ -s "$file" ]] || return 0
+    file=$(readlink -f -- "$file")
+    dir=$(dirname "$file")
+
+    # Keep the preview only while its notification is available.
+    if command -v ffmpeg >/dev/null; then
+        thumbnail=$(mktemp "$runtime/hypr-screenrecord-preview-XXXXXX.png")
+        printf -v cleanup_command 'rm -f -- %q' "$thumbnail"
+        trap "$cleanup_command" EXIT
+        if ffmpeg -nostdin -loglevel error -y -i "$file" -frames:v 1 \
+            -vf 'scale=320:180:force_original_aspect_ratio=decrease' -threads 1 \
+            "$thumbnail" 2>/dev/null; then
+            icon="$thumbnail"
+        fi
+    fi
+
+    reply=$(notify-send --app-name=Screenrecord --print-id --icon="$icon" \
+        --action='default=Edit / Trim / Crop' \
+        --action='play=Putar video' \
+        --action='copy=Copy file' \
+        --action='folder=Buka folder' \
+        'Rekaman tersimpan' \
+        'Klik untuk trim/crop. Klik kanan: Putar / Copy file / Buka folder.') || return 0
+    notification_id="${reply%%$'\n'*}"
+    action="${reply#*$'\n'}"
+    case "$action" in
+        default|play|copy|folder)
+            makoctl dismiss -n "$notification_id" >/dev/null 2>&1 || true
+            ;;
+    esac
+    # The toast no longer needs its preview once an action is selected or it expires.
+    [[ -z "$thumbnail" ]] || rm -f -- "$thumbnail"
+    trap - EXIT
+
+    case "$action" in
+        default)
+            "$(dirname "$self")/video-edit.sh" "$file"
+            ;;
+        play) mpv -- "$file" ;;
+        copy)
+            # File clipboard uses an escaped URI, including spaces/non-ASCII names.
+            jq -nrj --arg file "$file" \
+                '"file://" + ($file | split("/") | map(@uri) | join("/")) + "\r\n"' |
+                wl-copy --type text/uri-list
+            ;;
+        folder) xdg-open "$dir" ;;
+    esac
+}
+
 # ExecStopPost also runs if the encoder fails or the compositor disconnects.
 finished() {
     [[ -s "$state" ]] || return 0
@@ -49,7 +101,15 @@ finished() {
     file=$(jq -r .file "$state")
     rm -f "$state"
     if [[ "${SERVICE_RESULT:-}" == success && -s "$file" ]]; then
-        note "Rekaman tersimpan" "$file"
+        # Waiting for a click/editor must not block recorder shutdown or a new take.
+        # ExitType=cgroup also keeps clipboard owners / launched apps alive after
+        # the notification handler exits, until those child processes finish.
+        systemd-run --user --quiet --collect --service-type=exec \
+            --unit="hypr-screenrecord-result-$(date +%s%N)" \
+            --property=ExitType=cgroup \
+            --setenv="WAYLAND_DISPLAY=${WAYLAND_DISPLAY:-wayland-1}" \
+            --setenv="XDG_RUNTIME_DIR=$runtime" \
+            -- "$self" _result "$file" || note 'Rekaman tersimpan' "$file"
     else
         [[ -s "$file" ]] || rm -f -- "$file"
         note "Rekaman gagal atau terputus" "Cek: journalctl --user -u $unit"
@@ -66,6 +126,7 @@ action="${1:-toggle}"
 case "$action" in
     status) show_status; exit 0 ;;
     _finished) finished; exit 0 ;;
+    _result) show_result "${2:-}"; exit 0 ;;
     folder)
         dir=$(recordings_dir)
         mkdir -p "$dir"

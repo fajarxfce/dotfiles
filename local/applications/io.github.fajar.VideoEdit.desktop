@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Edit Rekaman
+Comment=Trim durasi dan crop video
+Exec=video-edit.sh %f
+TryExec=video-edit.sh
+Icon=video-x-generic
+Terminal=false
+StartupNotify=true
+Categories=AudioVideo;Video;

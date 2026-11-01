@@ -25,10 +25,12 @@
     "custom/sep":  { "format": " ", "tooltip": false },
     "custom/sep2": { "format": " ", "tooltip": false },
 
+    // bin/waybar includes the Lua click fix while preserving occupied/empty state.
     "hyprland/workspaces": {
-        "on-click": "activate",
         "format": "{id}",
-        "persistent-workspaces": { "*": 5 }
+        "persistent-workspaces": { "*": 5 },
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({workspace=\"m-1\"})'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({workspace=\"m+1\"})'"
     },
 
     "hyprland/window": {

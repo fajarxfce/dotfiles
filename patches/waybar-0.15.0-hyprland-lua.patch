@@ -1,0 +1,42 @@
+--- a/src/modules/hyprland/workspace.cpp
++++ b/src/modules/hyprland/workspace.cpp
+@@ -69,22 +69,24 @@
+ bool Workspace::handleClicked(GdkEventButton* bt) const {
+   if (bt->type == GDK_BUTTON_PRESS) {
+     try {
+-      if (id() > 0) {  // normal
+-        if (m_workspaceManager.moveToMonitor()) {
+-          m_ipc.getSocket1Reply("dispatch focusworkspaceoncurrentmonitor " + std::to_string(id()));
+-        } else {
+-          m_ipc.getSocket1Reply("dispatch workspace " + std::to_string(id()));
++      // Hyprland 0.57 uses Lua dispatchers. Decimal byte escapes preserve
++      // arbitrary UTF-8 workspace names without treating them as Lua code.
++      const auto luaString = [](const std::string& value) {
++        std::string result = "\"";
++        for (unsigned char byte : value) {
++          result += fmt::format("\\{:03d}", static_cast<unsigned int>(byte));
+         }
+-      } else if (!isSpecial()) {  // named (this includes persistent)
+-        if (m_workspaceManager.moveToMonitor()) {
+-          m_ipc.getSocket1Reply("dispatch focusworkspaceoncurrentmonitor name:" + name());
+-        } else {
+-          m_ipc.getSocket1Reply("dispatch workspace name:" + name());
+-        }
+-      } else if (id() != -99) {  // named special
+-        m_ipc.getSocket1Reply("dispatch togglespecialworkspace " + name());
+-      } else {  // special
+-        m_ipc.getSocket1Reply("dispatch togglespecialworkspace");
++        return result + "\"";
++      };
++      if (isSpecial()) {
++        const auto specialName = id() == -99 ? std::string{} : name();
++        m_ipc.getSocket1Reply("dispatch hl.dsp.workspace.toggle_special(" +
++                             luaString(specialName) + ")");
++      } else {
++        const auto selector = id() > 0 ? std::to_string(id()) : "name:" + name();
++        m_ipc.getSocket1Reply("dispatch hl.dsp.focus({workspace=" + luaString(selector) +
++                             ",on_current_monitor=" +
++                             (m_workspaceManager.moveToMonitor() ? "true" : "false") + "})");
+       }
+       return true;
+     } catch (const std::exception& e) {

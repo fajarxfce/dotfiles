@@ -81,6 +81,10 @@ for s in "$BIN_SRC"/*; do
     link "$s" "$HOME/.local/bin/$(basename "$s")"
 done
 
+# Waybar 0.15's native workspace module needs Lua dispatchers for Hyprland 0.57.
+c_info "Build Waybar dengan dukungan klik workspace Hyprland Lua…"
+"$BIN_SRC/build-waybar.sh"
+
 # ── deploy user desktop overrides (Zed → Intel iGPU, etc.) ────────
 # These shadow the system .desktop files in /usr/share/applications so GUI
 # launches (wofi, keybinds) pick up our tweaks — the session PATH lacks
@@ -114,7 +118,6 @@ c_ok "Sleep/idle siap: $("$BIN_SRC/idle.sh" status 2>/dev/null) (atur: SUPER+ALT
 c_info "Seed tema…"
 TH="$HOME/.config"
 if [ ! -f "$TH/hypr/.theme" ]; then
-    cp -f "$TH/hypr/themes/dark.conf"  "$TH/hypr/theme.conf"
     cp -f "$TH/waybar/styles/dark.css" "$TH/waybar/style.css"
     cp -f "$TH/wofi/styles/dark.css"   "$TH/wofi/style.css"
     cp -f "$TH/mako/configs/dark"      "$TH/mako/config"

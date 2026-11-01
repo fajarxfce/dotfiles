@@ -1,22 +1,19 @@
 #!/usr/bin/env bash
 # Toggle maximization while keeping floating windows above it (SUPER+A).
-# Hyprland 0.56 hides existing floats on fullscreen/maximize transitions;
-# alterzorder restores both their visibility and input without pinning them.
+# Raise mapped floats after the transition and restore the keyboard focus.
 set -euo pipefail
 
-active=$(hyprctl activewindow -j)
-address=$(jq -er '.address | select(type == "string" and test("^0x[0-9a-fA-F]+$"))' <<< "$active") || exit 0
-workspace=$(jq -er '.workspace.id | numbers' <<< "$active") || exit 0
-
-# clients is ordered from bottom to top: raising in that order preserves the
-# relative order of the floats. Hidden group tabs and other workspaces stay out.
-# Run one batch so the compositor finishes the transition before rendering.
-# alterzorder can refocus under the mouse, so restore keyboard focus at the end.
-batch=$(hyprctl clients -j | jq -r --arg address "$address" --argjson workspace "$workspace" '
-    (["dispatch focuswindow address:" + $address, "dispatch fullscreen 1"] +
-     [.[] | select(.mapped and (.hidden | not) and .floating and
-         .fullscreen == 0 and .workspace.id == $workspace and .address != $address) |
-         "dispatch alterzorder top,address:" + .address] +
-     ["dispatch focuswindow address:" + $address]) | join("; ")
-')
-hyprctl --batch "$batch" >/dev/null
+hyprctl eval '
+local target = hl.get_active_window()
+if not target or not target.workspace then return end
+local workspace = target.workspace.id
+hl.dispatch(hl.dsp.window.fullscreen({mode = "maximized", window = target}))
+for _, window in ipairs(hl.get_windows()) do
+    if window.address ~= target.address and window.mapped and not window.hidden
+        and window.floating and window.fullscreen == 0 and window.workspace
+        and window.workspace.id == workspace then
+        hl.dispatch(hl.dsp.window.alter_zorder({mode = "top", window = window}))
+    end
+end
+hl.dispatch(hl.dsp.focus({window = target}))
+' >/dev/null
